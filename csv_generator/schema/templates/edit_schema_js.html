@@ -73,15 +73,10 @@ $("#submit_btn").click(function(e){
         console.log(nameArray)
         console.log(typeArray)
         console.log(orderArray)
-
-<!--         var id = {{ id }}-->
-<!--         console.log(id)-->
-
-        console.log('http://127.0.0.1/schema/' + '{{id}}' + '/edit')
-
         $.ajax({
               type: 'POST',
-              url: 'http://127.0.0.1:8000/schema/' + '{{id}}' + '/edit',
+<!--              url: 'http://127.0.0.1:8000/schema/' + '{{id}}' + '/edit',-->
+              url: '{% url 'edit_schema' id %}',
               headers: {'X-CSRFToken': '{{ csrf_token }}' },
               data: {'schema_name': schemaNameArray, 'column_separator': columnSeparatorArray, 'string_character': stringCharacterArray, 'column_name': nameArray, 'type': typeArray, 'order': orderArray},
               success: function (data) {
@@ -120,11 +115,11 @@ $("#submit_btn").click(function(e){
 
         console.log("Single object from form is ", obj);
 
-
-        console.log('http://127.0.0.1/schema/' + '{{id}}' + '/edit/')
         $.ajax({
               type: 'POST',
-              url: 'http://127.0.0.1:8000/schema/' + '{{id}}' + '/edit',
+<!--              url: 'http://127.0.0.1:8000/schema/' + '{{id}}' + '/edit',-->
+
+              url: '{% url 'edit_schema' id %}',
               headers: {'X-CSRFToken': '{{ csrf_token }}' },
               data: {'schema_name': schemaNameArray, 'column_separator': columnSeparatorArray, 'string_character': stringCharacterArray, 'column_name': nameArray, 'type': typeArray, 'order': orderArray},
               success: function (data) {

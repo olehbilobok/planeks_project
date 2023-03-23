@@ -54,12 +54,12 @@
                 <tr>
                   <td><a href="#">{{schema.schema_name}}</a></td>
                   <td>{{schema.updated_at}}</td>
-                  <td><a href="#" class="btn btn-primary a-btn-slide-text">
+                  <td><a href="{% url 'edit_schema' schema.id %}" class="btn btn-primary a-btn-slide-text">
                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                            <span><strong>Edit</strong></span>
                       </a>
                   </td>
-                  <td><a href="#" class="btn btn-primary a-btn-slide-text">
+                  <td><a href="{% url 'delete_schema' schema.id %}" class="btn btn-primary a-btn-slide-text">
                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                            <span><strong>Delete</strong></span>
                   </a>

@@ -17,7 +17,8 @@ class CSVManager:
         return [column_name.column_name for column_name in self.schema.columns.order_by('order')]
 
     def file_writer(self):
-        with open(os.path.abspath(f'schema/media/{self.get_filename()}'), 'w') as csv_file:
+        # with open(os.path.abspath(f'schema/media/{self.get_filename()}'), 'w') as csv_file:
+        with open(f'schema/media/{self.get_filename()}', 'w') as csv_file:
             writer = csv.writer(
                 csv_file,
                 delimiter=self.schema.get_column_separator_display(),

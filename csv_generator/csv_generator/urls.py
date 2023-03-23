@@ -13,10 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from user.views import home_screen_view, login_user, logout_user
-from schema.views import get_schema, create_schema, generate_data, edit_schema, delete_column, download_file
+from schema.views import get_schema, create_schema, generate_data, edit_schema, delete_column, download_file,\
+    delete_schema
 
 
 urlpatterns = [
@@ -29,5 +32,6 @@ urlpatterns = [
     path('schema/generate', generate_data, name='generate_data'),
     path('schema/<int:pk>/edit', edit_schema, name='edit_schema'),
     path('schema/<int:schema_pk>/column/<int:column_pk>', delete_column, name='delete_column'),
+    path('schema/<int:pk>', delete_schema, name='delete_schema'),
     path('download/<str:schema_name>/', download_file, name='download'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

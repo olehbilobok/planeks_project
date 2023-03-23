@@ -2,6 +2,7 @@ import re
 import os
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from schema.models import Schema, Column
 from schema.forms import ColumnForm, SchemaForm, SchemaUpdateForm, ColumnUpdateForm
 from schema.utils import CSVManager
@@ -17,7 +18,7 @@ def get_schema(request):
 
 def create_schema(request):
     context = {}
-    redirect_url = 'http://127.0.0.1:8000/schema/generate'
+    redirect_url = reverse('generate_data')
 
     if request.method == "POST":
         schema_name = request.POST.getlist('schema_name[]')
@@ -94,7 +95,7 @@ def edit_schema(request, pk):
     context = {}
     schema = Schema.objects.filter(id=pk).first()
     columns = schema.columns.order_by('order')
-    redirect_url = 'http://127.0.0.1:8000/schema/generate'
+    redirect_url = reverse('generate_data')
 
     if request.method == 'POST':
         schema_name = request.POST.getlist('schema_name[]')
@@ -182,9 +183,15 @@ def delete_column(request, column_pk, schema_pk):
     return redirect('edit_schema', pk=schema_pk)
 
 
+def delete_schema(request, pk):
+    schema = Schema.objects.get(id=pk)
+    schema.delete()
+    return redirect('schemas')
+
+
 def download_file(request, schema_name):
     file_name = request.user.username + '_' + schema_name + '.csv'
-    file_path = os.path.abspath(f'schema/media/{file_name}')
+    file_path = f'schema/media/{file_name}'
     if file_path:
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
