@@ -1,0 +1,147 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<style>
+.search-sec{
+    padding: 2rem;
+}
+.search-slt{
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+.wrn-btn{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+</style>
+
+    <div class="container">
+        <div class="d-flex flex-column">
+
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
+            <div style="text-align: right">
+                <p style="float: left; font-weight: bold; font-size: 25px">Sample schema</p>
+                  <button style="float: right" type="submit"
+                    class="btn btn-success btn-lg gradient-custom-4 text-body"><a href="{% url 'edit_schema' last_schema.id %}">Edit schema</a>
+                  </button>
+            </div>
+            <hr>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Column name</th>
+              <th scope="col">Column type</th>
+            </tr>
+          </thead>
+            {% for column in data_column %}
+
+              <tbody>
+                <tr>
+                  <td><a href="#">{{column.order}}</a></td>
+                  <td>{{column.column_name}}</td>
+                    <td>{{column.get_type_display}}</td>
+                </tr>
+              </tbody>
+            {% endfor %}
+
+        </table>
+
+        <form method="post" action="" id="generate-data-form">
+        {% csrf_token %}
+        <div style="text-align: right">
+                <p style="float: left; font-weight: bold; font-size: 25px">Data sets</p>
+                Rows: <input style="margin: 10px;" type="text" id="rows" name="rows" required minlength="1" maxlength="8" size="7">
+                  <button id="generate_data" style="float: right" type="submit"
+                    class="btn btn-success btn-lg gradient-custom-4 text-body">Generate data
+                  </button>
+        </div>
+        </form>
+        <hr>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Created</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+            {% for schema in data_schema %}
+              <tbody>
+                <tr>
+                  <td><a href="#">{{schema.id}}</a></td>
+                  <td>{{schema.created_at}}</td>
+                  <td>
+                  {% if schema.status %}
+                      <button id="status-button" type="submit"
+                        class="btn btn-success btn-lg gradient-custom-4 text-body">Ready
+                      </button>
+                  {% else %}
+                      <button id="status-button" type="submit"
+                        class="btn btn-info btn-lg gradient-custom-4 text-body">Status
+                      </button>
+                  {% endif %}
+                  </td>
+                    <td>
+                  <button type="submit"
+                    class="btn btn-warning btn-lg gradient-custom-4 text-body"><a href="{% url 'download' schema.schema_name %}">Download</a>
+                  </button>
+                  </td>
+                </tr>
+              </tbody>
+            {% endfor %}
+
+            </table>
+
+        </div>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+
+<script>
+
+  $("#generate-data-form").submit(function (e) {
+
+          e.preventDefault();
+
+          var statusButton = document.getElementById('status-button');
+          statusButton.disabled = true;
+          statusButton.innerText = 'Processing';
+          var headers = {'X-CSRFToken': '{{ csrf_token }}' };
+          var data = new Object();
+          data.rows = $('#rows').val();
+
+          $.ajax({
+              type: 'POST',
+              url: '{% url 'generate_data' %}',
+              headers: headers,
+              data: data,
+              success: function(response) {
+                statusButton.innerText = 'Ready';
+                    },
+              error: function(response) {
+                statusButton.innerText = 'Error';
+            },
+          });
+      });
+</script>
+
+
+{% endblock content%}

@@ -1,0 +1,125 @@
+{% extends 'home.html' %}
+
+
+{% block content %}
+  <style>
+  .hidden {
+      display: none
+  }
+  </style>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <div>
+  <form id="schema_form" method="POST">
+    {% csrf_token %}
+    <div class="container">
+    <div class="d-flex flex-column">
+      <div style="text-align: right">
+                  <p style="float: left; font-weight: bold; font-size: 20px">Data schemas </p> <p style="float: left; color:blue; margin: 4px">(*all fields are required)</p>
+                    <button style="float: right" id="submit_btn" type="submit"
+                      class="btn btn-success btn-lg gradient-custom-4 text-body">Submit</button>
+      </div>
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <label for="inputEmail4">Name</label>
+            <input type="text" class="form-control" id="inputEmail4" placeholder="Name" name="schema_name" required value="{{ schema_form.initial.schema_name }}">
+          </div>
+          <div class="form-group col-md-3">
+            <label>Column separator</label>
+            <select class="form-select" aria-label="Default select example" name="column_separator" required>
+                <option selected="selected">{{ schema_form.initial.column_separator }}</option>
+                {% for option in schema_form.column_separator %}
+                <option>{{option}}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+          <label>String character</label>
+          <select class="form-select" aria-label="Default select example" name="string_character" required>
+              <option selected="selected">{{ schema_form.initial.string_character }}</option>
+              {% for option in schema_form.string_character %}
+                <option>{{option}}</option>
+              {% endfor %}
+          </select>
+          </div>
+        </div>
+        <p style="font-weight: bold; font-size: 20px">Schema columns</p>
+        {% for column in column_form %}
+
+        <div id="column-form-list" class="form-row">
+          <div class="form-group col-md-3 column-form">
+            <label for="inputCity">Column name</label>
+            <input type="text" class="form-control" id="inputCity" name="column_name" value="{{ column.initial.column_name }}">
+          </div>
+          <div class="form-group col-md-3 column-form">
+            <label for="inputState">Type</label>
+            <select id="inputState" class="form-control form-select column-form" aria-label="Default select example" name="type">
+                <option selected="selected">{{ column.initial.type }}</option>
+                {% for option in column.type %}
+                    <option>{{option}}</option>
+               {% endfor %}
+            </select>
+          </div>
+          <div class="form-group col-md-3 column-form">
+            <label for="inputZip">Order</label>
+            <input type="number" class="form-control" id="inputZip" name="order" value="{{ column.initial.order }}">
+          </div>
+          <div class="form-group col-md-2 column-form">
+            <label for="inputZip">Delete</label>
+            <button type="submit" class="btn btn-danger form-control"><a href="{% url 'delete_column' column.initial.schema column.initial.id %}">Delete</a></button>
+          </div>
+
+
+
+        {% endfor %}
+        <div class="col-sm-12 col-md-12 col-lg-12">
+             <div id="input_wrapper"></div>
+        </div>
+      </form>
+  </div>
+      <div style="width:900px;height:130px;border-style: ridge;" id="column-form-list" class="form-row">
+          <div class="form-group col-md-3 column-form">
+            <label for="inputCity">Column name</label>
+            <input type="text" class="form-control" id="inputCity" name="name" readonly>
+          </div>
+          <div class="form-group col-md-3 column-form">
+            <label for="inputState">Type</label>
+            <select id="inputState" class="form-control form-select column-form" aria-label="Default select example" name="ctype" disabled="true">
+              <option disabled selected>Choose the type of data</option>
+              <option>Full name</option>
+              <option>Job</option>
+              <option>Email</option>
+              <option>Domain name</option>
+              <option>Phone number</option>
+              <option>Company name</option>
+              <option>Text</option>
+              <option>Integer</option>
+              <option>Address</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3 column-form">
+            <label for="inputZip">Order</label>
+            <input type="number" class="form-control" id="inputZip" name="corder" readonly>
+          </div>
+          <div class="form-group col-md-2 column-form">
+            <label for="inputZip">Delete</label>
+            <button type="button" class="btn btn-danger form-control">Delete</button>
+          </div>
+          <div class="form-group col-md-3">
+            <button id="add_btn" type="submit" class="btn btn-primary">Add column</button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+<!--<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+
+{% include 'edit_schema_js.html' %}
+
+{% endblock %}

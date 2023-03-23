@@ -1,0 +1,77 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<style>
+.search-sec{
+    padding: 2rem;
+}
+.search-slt{
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+.wrn-btn{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+    height: calc(3rem + 2px) !important;
+    border-radius:0;
+}
+</style>
+
+    <div class="container">
+        <div class="d-flex flex-column">
+
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
+            <div style="text-align: right">
+                <p style="float: left; font-weight: bold; font-size: 25px">Data schemas</p>
+                  <button style="float: right" type="submit"
+                    class="btn btn-success btn-lg gradient-custom-4 text-body"><a href="{% url 'create_schema' %}">New schema</a>
+                  </button>
+            </div>
+            <hr>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Modified</th>
+              <th scope="col">Actions</th>
+                <th scope="col"></th>
+            </tr>
+          </thead>
+            {% for schema in data %}
+              <tbody>
+                <tr>
+                  <td><a href="#">{{schema.schema_name}}</a></td>
+                  <td>{{schema.updated_at}}</td>
+                  <td><a href="#" class="btn btn-primary a-btn-slide-text">
+                           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                           <span><strong>Edit</strong></span>
+                      </a>
+                  </td>
+                  <td><a href="#" class="btn btn-primary a-btn-slide-text">
+                           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                           <span><strong>Delete</strong></span>
+                  </a>
+                  </td>
+                </tr>
+              </tbody>
+            {% endfor %}
+
+            </table>
+
+
+        </div>
+    </div>
+
+{% endblock content%}
